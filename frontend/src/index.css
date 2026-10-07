@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* INDUSTRIA-X base styles — polished for 100% zoom readability */
+@layer base {
+  html {
+    font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+    font-size: 15.5px;
+    line-height: 1.65;
+    background-color: #f7f8fa;
+    color: #1f2328;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+
+  /* h1 is used for INDUSTRIA-X brand in sidebar — keep controlled there */
+  h1 { @apply text-2xl font-bold tracking-tight; }
+  h2 { @apply text-2xl font-bold tracking-tight; }
+  h3 { @apply text-base font-bold; }
+
+  /* Smooth focus rings across all interactive elements */
+  :focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* ── Card component ──────────────────────────────────────────────────── */
+  .card {
+    @apply bg-white border border-gray-200 rounded-xl p-5 shadow-sm;
+    transition: box-shadow 150ms ease, transform 150ms ease;
+  }
+  .card-hover:hover {
+    @apply shadow-md;
+    transform: translateY(-1px);
+  }
+
+  /* ── Status badge — slightly larger for readability ─────────────────── */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide;
+  }
+  .badge-ok     {
+    @apply bg-green-100 text-green-800 ring-1 ring-green-200;
+  }
+  .badge-warn   {
+    @apply bg-yellow-100 text-yellow-800 ring-1 ring-yellow-200;
+  }
+  .badge-error  {
+    @apply bg-red-100 text-red-800 ring-1 ring-red-200;
+  }
+  .badge-info   {
+    @apply bg-blue-100 text-blue-800 ring-1 ring-blue-200;
+  }
+
+  /* ── Simulated data label — always visible, per safety requirement ───── */
+  .simulated-label {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-bold
+           bg-amber-100 text-amber-800 border border-amber-300 tracking-wide;
+  }
+
+  /* ── AI-generated label ──────────────────────────────────────────────── */
+  .ai-label {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold
+           bg-purple-100 text-purple-800 border border-purple-300;
+  }
+
+  /* ── Consistent button base ─────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center gap-1.5 font-semibold rounded-lg transition-all duration-150
+           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+  }
+  .btn-primary {
+    @apply btn px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800
+           focus-visible:outline-blue-600 shadow-sm hover:shadow;
+  }
+  .btn-secondary {
+    @apply btn px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300
+           hover:bg-gray-50 hover:border-gray-400 active:bg-gray-100
+           focus-visible:outline-blue-500 shadow-sm;
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm;
+  }
+  .btn-xs {
+    @apply px-2.5 py-1 text-xs;
+  }
+
+  /* ── Table base ──────────────────────────────────────────────────────── */
+  .tbl-header {
+    @apply py-3 pr-4 font-semibold text-gray-500 text-sm;
+  }
+  .tbl-cell {
+    @apply py-3.5 pr-4 text-sm;
+  }
+
+  /* ── Section heading ─────────────────────────────────────────────────── */
+  .section-title {
+    @apply text-base font-bold text-gray-800;
+  }
+}

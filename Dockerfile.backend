@@ -1,0 +1,31 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY pyproject.toml ./
+RUN pip install --no-cache-dir -e "."
+
+# Copy application source
+COPY backend/ ./backend/
+COPY ml/ ./ml/
+COPY rag/ ./rag/
+COPY alembic.ini ./
+
+# Create directories that must exist at runtime
+RUN mkdir -p /app/ml/artifacts /app/data/processed /app/backend/chroma_db
+
+# Copy knowledge base for RAG ingest
+COPY knowledge_base/ ./knowledge_base/
+
+EXPOSE 8000
+
+# Run Alembic migrations then start the server.
+# --workers 1 is intentional for predictable migration ordering.
+CMD ["sh", "-c", "alembic upgrade head && uvicorn backend.main:app --host 0.0.0.0 --port 8000 --workers 1"]

@@ -1,0 +1,29 @@
+{
+  "anomaly_version": "v1",
+  "algorithm": "IsolationForest",
+  "n_estimators": 100,
+  "contamination": 0.05,
+  "random_state": 42,
+  "feature_columns": [
+    "Air temperature [K]",
+    "Process temperature [K]",
+    "Rotational speed [rpm]",
+    "Torque [Nm]",
+    "Tool wear [min]",
+    "Type"
+  ],
+  "train_rows": 8000,
+  "labels_used_in_training": false,
+  "train_score_mean": 0.0964766729024618,
+  "train_score_std": 0.0494902312175424,
+  "train_score_min": -0.11912422919096965,
+  "train_score_max": 0.1739010577124609,
+  "anomaly_threshold_score": 1.4729902952752283e-17,
+  "dataset": "AI4I 2020 Predictive Maintenance Dataset (synthetic)",
+  "split_config": {
+    "test_size": 0.2,
+    "random_state": 42,
+    "stratify_column": "Machine failure",
+    "description": "80/20 stratified split on 'Machine failure'. Stratification preserves the class imbalance ratio in both partitions."
+  }
+}

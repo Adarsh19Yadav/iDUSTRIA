@@ -1,0 +1,101 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "industria-x-backend"
+version = "0.1.0"
+description = "INDUSTRIA-X — Agentic AI for Predictive Maintenance"
+requires-python = ">=3.11"
+dependencies = [
+    # ── Web framework ──────────────────────────────────────────────────────────
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.29.0",
+    "python-multipart>=0.0.9",
+
+    # ── Settings / environment ─────────────────────────────────────────────────
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "python-dotenv>=1.0.1",
+
+    # ── Database ───────────────────────────────────────────────────────────────
+    "sqlalchemy>=2.0.30",
+    "alembic>=1.13.1",
+    "psycopg2-binary>=2.9.9",
+
+    # ── Redis ──────────────────────────────────────────────────────────────────
+    "redis>=5.0.4",
+
+    # ── ML ─────────────────────────────────────────────────────────────────────
+    "scikit-learn>=1.5.0",
+    "xgboost>=2.0.3",
+    "imbalanced-learn>=0.12.3",
+    "shap>=0.45.0",
+    "pandas>=2.2.2",
+    "numpy>=1.26.4",
+    "joblib>=1.4.2",
+
+    # ── Agentic AI ─────────────────────────────────────────────────────────────
+    "langchain>=0.2.0",
+    "langgraph>=0.1.0",
+    "langchain-community>=0.2.0",
+
+    # ── RAG / Embeddings ───────────────────────────────────────────────────────
+    "chromadb>=0.5.0",
+    "sentence-transformers>=3.0.0",
+
+    # ── HTTP client ────────────────────────────────────────────────────────────
+    "httpx>=0.27.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0",
+    "pytest-cov>=5.0.0",
+    "pytest-asyncio>=0.23.7",
+    "httpx>=0.27.0",
+    "ruff>=0.4.7",
+    "black>=24.4.2",
+    "mypy>=1.10.0",
+    "types-redis>=4.6.0.20240425",
+]
+watsonx = [
+    "ibm-watsonx-ai>=1.0.0",
+]
+openai = [
+    "openai>=1.30.0",
+    "langchain-openai>=0.1.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["backend*", "ml*", "rag*"]
+
+# ── Ruff ──────────────────────────────────────────────────────────────────────
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["B008"]  # FastAPI Depends() pattern
+
+# ── Black ─────────────────────────────────────────────────────────────────────
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+# ── Mypy ──────────────────────────────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.11"
+strict = false
+ignore_missing_imports = true
+
+# ── Pytest ────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+# asyncio_mode = "auto"  # uncomment when pytest-asyncio is installed (Phase 2+)
+markers = [
+    "ml_artifacts: tests that require trained ML artifacts to be present",
+]

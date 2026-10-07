@@ -1,0 +1,90 @@
+services:
+
+  # ── PostgreSQL ─────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: industria_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: industria
+      POSTGRES_PASSWORD: industria_pass
+      POSTGRES_DB: industria_x
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U industria -d industria_x"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis ──────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: industria_redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend (FastAPI) ──────────────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: industria_backend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./ml/artifacts:/app/ml/artifacts
+      - ./data:/app/data
+      - ./backend/chroma_db:/app/backend/chroma_db
+
+  # ── Frontend (nginx — production build) ────────────────────────────────────
+  # Dockerfile.frontend performs a two-stage build:
+  #   Stage 1 (node:20-alpine): npm ci && npm run build  → /app/dist
+  #   Stage 2 (nginx:alpine):   serves /app/dist on port 80
+  #
+  # IMPORTANT — VITE_* environment variables:
+  #   VITE_* variables are BUNDLED into the frontend JavaScript at build time.
+  #   They are NOT runtime secrets and must NOT contain sensitive backend credentials.
+  #   VITE_API_KEY is suitable ONLY for development/demo where all parties are trusted.
+  #   Never use VITE_API_KEY in production with real secrets.
+  #
+  # VITE_API_BASE_URL must point to the backend service visible from the browser.
+  # In Docker Compose, the Vite dev proxy is not available — configure the real
+  # backend URL here (or use an nginx reverse proxy to /api).
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../Dockerfile.frontend
+      args:
+        # Build-time env vars — bundled into JS, NOT runtime secrets
+        - VITE_API_BASE_URL=http://localhost:8000
+        # VITE_API_KEY: set this ONLY for development/demo — see security note above
+        # - VITE_API_KEY=dev-api-key-change-in-production
+    container_name: industria_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:

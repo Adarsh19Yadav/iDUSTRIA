@@ -1,0 +1,106 @@
+{
+  "model_version": "v1",
+  "model_name": "XGBoost",
+  "threshold": 0.5429717302322388,
+  "feature_columns": [
+    "Air temperature [K]",
+    "Process temperature [K]",
+    "Rotational speed [rpm]",
+    "Torque [Nm]",
+    "Tool wear [min]",
+    "Type"
+  ],
+  "numerical_features": [
+    "Air temperature [K]",
+    "Process temperature [K]",
+    "Rotational speed [rpm]",
+    "Torque [Nm]",
+    "Tool wear [min]"
+  ],
+  "categorical_features": [
+    "Type"
+  ],
+  "target_column": "Machine failure",
+  "dataset": "AI4I 2020 Predictive Maintenance Dataset (synthetic)",
+  "split_config": {
+    "test_size": 0.2,
+    "random_state": 42,
+    "stratify_column": "Machine failure",
+    "description": "80/20 stratified split on 'Machine failure'. Stratification preserves the class imbalance ratio in both partitions."
+  },
+  "train_size": 8000,
+  "test_size": 2000,
+  "train_failures": 271,
+  "test_failures": 68,
+  "evaluation_metrics": {
+    "Logistic Regression": {
+      "threshold": 0.874845042429509,
+      "accuracy": 0.959,
+      "precision_failure": 0.4,
+      "recall_failure": 0.4117647058823529,
+      "f1_failure": 0.4057971014492754,
+      "roc_auc": 0.9082480818414322,
+      "pr_auc": 0.39190481350902145,
+      "tp": 28,
+      "fp": 42,
+      "tn": 1890,
+      "fn": 40,
+      "confusion_matrix": [
+        [
+          1890,
+          42
+        ],
+        [
+          40,
+          28
+        ]
+      ]
+    },
+    "Random Forest": {
+      "threshold": 0.55,
+      "accuracy": 0.9855,
+      "precision_failure": 0.8421052631578947,
+      "recall_failure": 0.7058823529411765,
+      "f1_failure": 0.768,
+      "roc_auc": 0.9609936365850688,
+      "pr_auc": 0.8005089847906124,
+      "tp": 48,
+      "fp": 9,
+      "tn": 1923,
+      "fn": 20,
+      "confusion_matrix": [
+        [
+          1923,
+          9
+        ],
+        [
+          20,
+          48
+        ]
+      ]
+    },
+    "XGBoost": {
+      "threshold": 0.5429717302322388,
+      "accuracy": 0.9845,
+      "precision_failure": 0.7761194029850746,
+      "recall_failure": 0.7647058823529411,
+      "f1_failure": 0.7703703703703704,
+      "roc_auc": 0.9684417245158934,
+      "pr_auc": 0.8389432842442042,
+      "tp": 52,
+      "fp": 15,
+      "tn": 1917,
+      "fn": 16,
+      "confusion_matrix": [
+        [
+          1917,
+          15
+        ],
+        [
+          16,
+          52
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "features": [
+    "Torque [Nm]",
+    "Tool wear [min]",
+    "Air temperature [K]",
+    "Rotational speed [rpm]",
+    "Process temperature [K]",
+    "Type"
+  ],
+  "mean_abs_shap": [
+    4.020039,
+    3.077425,
+    1.938468,
+    1.856319,
+    0.968223,
+    0.307751
+  ],
+  "sample_size": 500,
+  "model_version": "v1"
+}
